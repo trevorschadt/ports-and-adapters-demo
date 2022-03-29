@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    dataSourceClassName: org.h2.jdbcx.JdbcDataSource
+    url: jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1;MVCC=TRUE
+    databaseName: postgres
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect

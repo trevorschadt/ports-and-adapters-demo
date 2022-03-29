@@ -1,0 +1,39 @@
+name: Integration testing
+on: push
+
+jobs:
+  basic-tests:
+    runs-on: [self-hosted, azure]
+    container: nexus.tools.dcsg.com:5000/library/openjdk:latest
+    services:
+
+      postgres:
+        # Docker Hub image
+        image: postgres:11.14
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 15s
+          --health-timeout 10s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v2
+
+      #- name: Get vault secrets
+      #  id: secrets
+      #  uses: hashicorp/vault-action@v2.4.0
+      #  with:
+      #    url: https://vault.tools.dcsg.com
+      #    method: approle
+      #    roleId: ${{ secrets.VAULT_ROLE_ID_DEV }}
+      #    secretId: ${{ secrets.VAULT_SECRET_ID_DEV }}
+      #    secrets: |
+      #      concourse/concourse/list/custom-products/ NAME_OF_KEY | NAME_OF_KEY_FOR_USE_HERE
+      #
+      #  use like this: ${{ steps.secrets.outputs.NAME_OF_KEY_FOR_USE_HERE }}
+
+      - name: Integration tests
+        run:  ./mvnw clean test -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres

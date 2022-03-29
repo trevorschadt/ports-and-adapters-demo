@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+/**
+ * Notice that this class did not have to change when we switched out the implementation behind the interface!
+ * All the class needs to worry about is "push button, get data." It doesn't need to worry about how the data is gotten.
+ */
+
 @Component
 class ItemAdapter implements ItemRetriever {
     private final OutboundItemRetriever outboundItemRetriever;

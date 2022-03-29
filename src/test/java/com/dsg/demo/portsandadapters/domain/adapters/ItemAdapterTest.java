@@ -19,6 +19,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Notice that these tests did not have to change when we switched out the implementation behind the interface!
+ */
 @ExtendWith(MockitoExtension.class)
 class ItemAdapterTest {
 

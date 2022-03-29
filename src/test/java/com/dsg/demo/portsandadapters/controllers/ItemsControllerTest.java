@@ -40,8 +40,8 @@ class ItemsControllerTest {
                 .getItem(any());
         ResponseEntity<ItemDTO> responseEntity = testSubject.getItemById(itemId);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        verify(testSubject, times(1)).getItemById(itemId);
-        verifyNoMoreInteractions(testSubject);
+        verify(itemRetriever, times(1)).getItem(itemId);
+        verifyNoMoreInteractions(itemRetriever);
     }
 
     @Test
@@ -52,8 +52,8 @@ class ItemsControllerTest {
                 .getItem(any());
         ResponseEntity<ItemDTO> responseEntity = testSubject.getItemById(itemId);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        verify(testSubject, times(1)).getItemById(itemId);
-        verifyNoMoreInteractions(testSubject);
+        verify(itemRetriever, times(1)).getItem(itemId);
+        verifyNoMoreInteractions(itemRetriever);
     }
 
     @Test
@@ -66,7 +66,7 @@ class ItemsControllerTest {
         ResponseEntity<ItemDTO> responseEntity = testSubject.getItemById(itemId);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isEqualTo(itemMapper.toResponse(item));
-        verify(testSubject, times(1)).getItemById(itemId);
-        verifyNoMoreInteractions(testSubject);
+        verify(itemRetriever, times(1)).getItem(itemId);
+        verifyNoMoreInteractions(itemRetriever);
     }
 }

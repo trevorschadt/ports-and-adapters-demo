@@ -8,9 +8,11 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -19,8 +21,8 @@ class ItemDatabaseAdapterTest {
 
     @Mock
     private ItemRepository itemRepository;
-    @Mock
-    private InventoryRepository inventoryRepository;
+//    @Mock
+//    private InventoryRepository inventoryRepository;
 
     private final ItemDatabaseMapper itemDatabaseMapper = Mappers.getMapper(ItemDatabaseMapper.class);
 
@@ -28,11 +30,11 @@ class ItemDatabaseAdapterTest {
 
     private final UUID itemId = UUID.randomUUID();
 
-    private final Random randomizer = new Random();
+//    private final Random randomizer = new Random();
 
     @BeforeEach
     void setUp() {
-        testSubject = new ItemDatabaseAdapter(itemRepository, inventoryRepository, itemDatabaseMapper);
+        testSubject = new ItemDatabaseAdapter(itemRepository, /* inventoryRepository, */ itemDatabaseMapper);
     }
 
     @Test
@@ -61,37 +63,37 @@ class ItemDatabaseAdapterTest {
         verify(itemRepository, times(1)).findById(itemId);
         verifyNoMoreInteractions(itemRepository);
     }
-
-    @Test
-    void getInventory_shouldReturnEmptyMapFromEmptyList() {
-        doReturn(Collections.emptyList())
-                .when(inventoryRepository)
-                .findAllByItemId(any());
-        assertThat(testSubject.getInventory(itemId)).isEmpty();
-        verify(inventoryRepository, times(1)).findAllByItemId(itemId);
-        verifyNoMoreInteractions(itemRepository);
-    }
-
-    @Test
-    void getInventory_shouldReturnMappedEntries() {
-        int store1Inventory = randomizer.nextInt(100);
-        int store2Inventory = randomizer.nextInt(100);
-        int store3Inventory = randomizer.nextInt(100);
-        List<InventoryEntity> entities = List.of(
-                InventoryEntity.builder().itemId(itemId).storeNumber("store-1").currentInventory(store1Inventory).build(),
-                InventoryEntity.builder().itemId(itemId).storeNumber("store-2").currentInventory(store2Inventory).build(),
-                InventoryEntity.builder().itemId(itemId).storeNumber("store-3").currentInventory(store3Inventory).build()
-        );
-        doReturn(entities)
-                .when(inventoryRepository)
-                .findAllByItemId(any());
-        assertThat(testSubject.getInventory(itemId))
-                .containsExactly(
-                        entry("store-1", store1Inventory),
-                        entry("store-2", store2Inventory),
-                        entry("store-3", store3Inventory)
-                );
-        verify(inventoryRepository, times(1)).findAllByItemId(itemId);
-        verifyNoMoreInteractions(itemRepository);
-    }
+//
+//    @Test
+//    void getInventory_shouldReturnEmptyMapFromEmptyList() {
+//        doReturn(Collections.emptyList())
+//                .when(inventoryRepository)
+//                .findAllByItemId(any());
+//        assertThat(testSubject.getInventory(itemId)).isEmpty();
+//        verify(inventoryRepository, times(1)).findAllByItemId(itemId);
+//        verifyNoMoreInteractions(itemRepository);
+//    }
+//
+//    @Test
+//    void getInventory_shouldReturnMappedEntries() {
+//        int store1Inventory = randomizer.nextInt(100);
+//        int store2Inventory = randomizer.nextInt(100);
+//        int store3Inventory = randomizer.nextInt(100);
+//        List<InventoryEntity> entities = List.of(
+//                InventoryEntity.builder().itemId(itemId).storeNumber("store-1").currentInventory(store1Inventory).build(),
+//                InventoryEntity.builder().itemId(itemId).storeNumber("store-2").currentInventory(store2Inventory).build(),
+//                InventoryEntity.builder().itemId(itemId).storeNumber("store-3").currentInventory(store3Inventory).build()
+//        );
+//        doReturn(entities)
+//                .when(inventoryRepository)
+//                .findAllByItemId(any());
+//        assertThat(testSubject.getInventory(itemId))
+//                .containsExactly(
+//                        entry("store-1", store1Inventory),
+//                        entry("store-2", store2Inventory),
+//                        entry("store-3", store3Inventory)
+//                );
+//        verify(inventoryRepository, times(1)).findAllByItemId(itemId);
+//        verifyNoMoreInteractions(itemRepository);
+//    }
 }
